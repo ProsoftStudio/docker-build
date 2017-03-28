@@ -7,7 +7,8 @@ MAINTAINER Ben Sampson <ben@myns.co>
 RUN apt-get update && \
     apt-get install -y \
     apt-transport-https \
-    ca-certificates curl \
+    ca-certificates \
+    curl \
     git \
     zip \
     unzip \
