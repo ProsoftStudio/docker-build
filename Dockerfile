@@ -3,28 +3,43 @@
 FROM debian:jessie
 MAINTAINER Ben Sampson <ben@myns.co>
 
-# Install dotdeb for up-to-date packages
-ADD https://www.dotdeb.org/dotdeb.gpg /tmp/dotdeb.gpg
+# Install some base packages
+RUN apt-get update && \
+    apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    git \
+    zip \
+    unzip \
+    sudo
 
-RUN echo "Install dotdeb" \
-	&& echo "deb http://packages.dotdeb.org jessie all" > /etc/apt/sources.list.d/dotdeb.list \
-	&& echo "deb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.list \
-	&& apt-key add /tmp/dotdeb.gpg
+# Download and save apt PGP for php
+ADD https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
 
-RUN apt-get update -y
+# Add php apt source
+RUN echo "deb https://packages.sury.org/php/ jessie main" > /etc/apt/sources.list.d/php.list
 
-# Installs PHP/mods and software.
-RUN apt-get install -y php7.0-fpm php7.0-cli php7.0-mbstring php7.0-xml php7.0-curl php7.0-intl php7.0-gd php7.0-sqlite3 curl git zip unzip rubygems sudo
+RUN apt-get update && \
+    apt-get install -y \
+    php7.0-fpm \
+    php7.0-cli \
+    php7.0-mbstring \
+    php7.0-xml \
+    php7.0-curl \
+    php7.0-intl \
+    php7.0-gd \
+    php7.0-sqlite3 \
+    php7.0-mysql \
+    php7.0-pgsql \
+    rubygems
 
 # Install Composer
-RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php
-RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-RUN php -r "unlink('composer-setup.php');"
+RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    php -r "unlink('composer-setup.php');"
 
-# Upgrade any packages
-RUN apt-get upgrade -y
-
-# Test build
-RUN php -v
-RUN git --version
-RUN composer --version
+# Test build (is this good?)
+RUN php -v && \
+    git --version && \
+    composer --version
