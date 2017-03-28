@@ -6,7 +6,7 @@
 ```yml
 # PHP 7.1
 test:php7.1:
-  image: bashy/docker-build:latest
+  image: bashy/docker-build:php71
   script:
   - vendor/bin/parallel-lint --exclude vendor --exclude _ide_helper.php .
   - vendor/bin/phpunit
