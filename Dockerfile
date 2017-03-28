@@ -3,7 +3,7 @@
 FROM debian:jessie
 MAINTAINER Ben Sampson <ben@myns.co>
 
-# Install some base packages
+
 RUN apt-get update && \
     apt-get install -y \
     apt-transport-https \
@@ -14,10 +14,7 @@ RUN apt-get update && \
     unzip \
     sudo
 
-# Download and save apt PGP for php
 ADD https://packages.sury.org/php/apt.gpg /etc/apt/trusted.gpg.d/php.gpg
-
-# Add php apt source
 RUN echo "deb https://packages.sury.org/php/ jessie main" > /etc/apt/sources.list.d/php.list
 
 RUN apt-get update && \
@@ -34,12 +31,11 @@ RUN apt-get update && \
     php7.0-pgsql \
     rubygems
 
-# Install Composer
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
     php -r "unlink('composer-setup.php');"
 
-# Test build (is this good?)
+# Is this good?
 RUN php -v && \
     git --version && \
     composer --version
