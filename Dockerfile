@@ -30,6 +30,7 @@ RUN apt-get update && \
     php7.0-sqlite3 \
     php7.0-mysql \
     php7.0-pgsql \
+    php7.0-xdebug \
     rubygems
 
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
